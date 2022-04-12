@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">考勤通</string>
+    <string name="title_home">考勤</string>
+    <string name="title_dashboard">我的考勤</string>
+    <string name="title_notifications">个人信息</string>
+    <string name="login_or_register">登录/注册</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+
+    <string name="login_string">登录</string>
+    <string name="account_string">邮箱</string>
+    <string name="password_string">密码</string>
+    <string name="register_note">没有账号？注册一个</string>
+    <string name="register_string">注册</string>
+    <string name="conform_password_string">确认密码</string>
+    <string name="name_string">姓名</string>
+    <string name="face_data_commit_button_string">录入人脸数据</string>
+    <string name="face_data_uncommitted_note">人脸数据尚未录入！请点击下方按钮录入！</string>
+    <string name="face_data_committed_note">人脸数据已录入</string>
+
+    <string name="face_detect_not_found_note">请将相机对准人脸</string>
+    <string name="face_detect_detecting_note">检测中，请保持相机稳定</string>
+</resources>

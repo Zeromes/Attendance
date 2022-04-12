@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.attendance">
+
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher_attendance"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Attendance">
+        <activity
+            android:name=".ui.profile.faceRecognize.TestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.profile.faceRecognize.testActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.profile.faceRecognize.TempActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.profile.faceRecognize.FaceRecognitionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.profile.register.RegisterActivity"
+            android:exported="false"
+            android:label="@string/register_string" />
+        <activity
+            android:name=".ui.profile.login.LoginActivity"
+            android:exported="false"
+            android:label="@string/login_string" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
