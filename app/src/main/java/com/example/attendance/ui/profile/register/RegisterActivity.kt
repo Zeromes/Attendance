@@ -4,14 +4,22 @@ import android.content.Intent
 import android.media.FaceDetector
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import com.example.attendance.R
 import com.example.attendance.ui.profile.faceRecognize.FaceRecognitionActivity
 import com.example.attendance.ui.profile.login.LoginActivity
+import com.example.attendance.utils.MatJsonUtils.matFromJson
+import org.opencv.core.Mat
 
 class RegisterActivity : AppCompatActivity() {
+    private var testMode = "getFeature"//getFeature matchFeature 测试用
+    private var gotFeature = false //测试用
+
+    private var faceFeature : String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
@@ -56,7 +64,47 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    fun onClickFaceRecord(view: View){
-        startActivity(Intent(this, FaceRecognitionActivity::class.java))
+    @Deprecated("Deprecated in Java", ReplaceWith(
+        "super.onActivityResult(requestCode, resultCode, data)",
+        "androidx.appcompat.app.AppCompatActivity"
+    )
+    )
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == 1 && resultCode == 1){
+            val feature = data!!.getStringExtra("feature")
+            Log.i("从FaceRecognitionActivity获取feature","获取到feature${feature}")
+            faceFeature = feature
+            gotFeature = true
+        }
+        //测试用
+        else if(requestCode == 1 && resultCode == 2){
+            Log.i("从FaceRecognitionActivity获取match结果","获取到结果：${data!!.getStringExtra("matchResult")}")
+        }
     }
+
+    fun onClickFaceRecord(view: View){
+        /*val intent = Intent(this, FaceRecognitionActivity::class.java).apply {
+            putExtra("mode","getFeature")
+        }
+        startActivityForResult(intent,1)*/
+
+
+        //测试用
+        if(gotFeature){
+            intent = Intent(this, FaceRecognitionActivity::class.java).apply {
+                putExtra("mode","matchFeature")
+                putExtra("originFeature",faceFeature)
+            }
+            startActivityForResult(intent,1)
+        }
+        else{
+            intent = Intent(this, FaceRecognitionActivity::class.java).apply {
+                putExtra("mode","getFeature")
+            }
+            startActivityForResult(intent,1)
+        }
+    }
+
+
 }

@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import com.example.attendance.R
 import com.example.attendance.utils.BitmapUtils.getBitmap
+import com.example.attendance.utils.MatJsonUtils.matFromJson
 import com.example.attendance.utils.MatJsonUtils.matToJson
 import com.google.common.util.concurrent.ListenableFuture
 import org.opencv.android.OpenCVLoader
@@ -29,7 +30,6 @@ import java.io.File
 import java.io.FileOutputStream
 import java.nio.file.FileStore
 
-//该Activity只负责返回一个可用的人脸feature，并不负责判别
 class FaceRecognitionActivity : AppCompatActivity() {
     private lateinit var cameraProviderFuture : ListenableFuture<ProcessCameraProvider>
     private var faceDetector : FaceDetectorYN? = null
@@ -37,8 +37,12 @@ class FaceRecognitionActivity : AppCompatActivity() {
 
     private var tempFaceFeature : Mat? = null
 
+    private var l2ScoreThreshold : Double = 0.6
+
     private var faceScore : Int = 0
     private val faceScoreThreshold : Int = 10
+    private var recognizedFailedTime : Int = 0
+    private var recognizedFailedTimeThreshold : Int = 3
 
     private var recognizeFinished = false
 
@@ -117,13 +121,13 @@ class FaceRecognitionActivity : AppCompatActivity() {
                     //Log.i("faceDetector",face!!.rows().toString())
 
                     if(faceDetected!!.rows()!=1){
-                        Log.i("faceDetector","未检测到人脸")
+                        //Log.i("faceDetector","未检测到人脸")
                         faceScore = 0
                         findViewById<TextView>(R.id.faceRecognizeNoteTextView).setText(R.string.face_detect_not_found_note)
                     }
                     else{
 
-                        Log.i("faceDetector","检测到人脸！得分：${faceDetected[0,14][0]}")
+                        //Log.i("faceDetector","检测到人脸！得分：${faceDetected[0,14][0]}")
                         findViewById<TextView>(R.id.faceRecognizeNoteTextView).setText(R.string.face_detect_detecting_note)
                         if(faceDetected[0,14][0]>0.99){//得分较高
                             //对人脸进行特征提取
@@ -140,20 +144,56 @@ class FaceRecognitionActivity : AppCompatActivity() {
                                 val faceFeature : Mat = Mat()
                                 faceRecognizer!!.feature(face,faceFeature)
                                 val l2Score =  faceRecognizer!!.match(faceFeature, tempFaceFeature, FR_NORM_L2)
-                                Log.i("faceDetector","与上一次获得的人脸的相似得分：${l2Score}")
-                                if(l2Score <= 0.1) {
+                                //Log.i("faceDetector","与上一次获得的人脸的相似得分：${l2Score}")
+                                if(l2Score <= l2ScoreThreshold) {
                                     // 同一个人
                                     tempFaceFeature = faceFeature
                                     faceScore += 1
                                     if(faceScore > faceScoreThreshold){//确认是可用的数据
-                                        Log.i("faceDetector","人脸特征转码成的JSON：${matToJson(tempFaceFeature!!)}")
-                                        recognizeFinished = true
-                                        finish()
-                                        /*//返回给上一个activity
-                                        val intent = Intent().apply {
-                                            putExtra("feature",matToJson(tempFaceFeature!!))
+                                        //Log.i("faceDetector","人脸特征转码成的JSON：${matToJson(tempFaceFeature!!)}")
+                                        //返回给上一个activity
+                                        //获取模式
+                                        val mode = intent.getStringExtra("mode")
+                                        if(mode == "getFeature"){//返回一个特征Mat
+                                            val intent = Intent().apply {
+                                                putExtra("feature",matToJson(tempFaceFeature!!))
+                                            }
+                                            setResult(1,intent)
+                                            recognizeFinished = true
+                                            finish()
                                         }
-                                        setResult(1,intent)*/
+                                        else if(mode == "matchFeature"){//需要返回一个识别结果时
+                                            val originFeature = intent.getStringExtra("originFeature")
+                                            val score =  faceRecognizer!!.match(matFromJson(originFeature), tempFaceFeature, FR_NORM_L2)
+                                            Log.i("matchFeature","源数据：${originFeature}")
+                                            Log.i("matchFeature","检测到的数据：${matToJson(tempFaceFeature!!)}")
+                                            Log.i("matchFeature","对比分数：${score}")
+                                            //对比来源脸
+                                            if(score<l2ScoreThreshold){//符合
+                                                Log.i("matchFeature","符合")
+                                                val intent = Intent().apply {
+                                                    putExtra("matchResult","ture")
+                                                }
+                                                setResult(2,intent)
+                                                recognizeFinished = true
+                                                finish()
+                                            }
+                                            else{//不符合
+                                                //重置识别
+                                                recognizedFailedTime += 1
+                                                faceScore = 0
+                                                tempFaceFeature = null
+                                                if(recognizedFailedTime > recognizedFailedTimeThreshold){//不符合次数超过阈值
+                                                    val intent = Intent().apply {
+                                                        putExtra("matchResult","false")
+                                                    }
+                                                    setResult(2,intent)
+                                                    recognizeFinished = true
+                                                    finish()
+                                                }
+                                                Log.i("matchFeature","不符合")
+                                            }
+                                        }
                                     }
                                 } else {
                                     // 不同人
