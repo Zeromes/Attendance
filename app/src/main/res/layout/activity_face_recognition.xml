@@ -24,7 +24,7 @@
             android:layout_marginVertical="50dp" />
 
         <TextView
-            android:id="@+id/faceRecognizeNoteTextView"
+            android:id="@+id/nameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

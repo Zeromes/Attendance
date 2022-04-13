@@ -28,7 +28,6 @@ import org.opencv.objdetect.FaceRecognizerSF
 import org.opencv.objdetect.FaceRecognizerSF.FR_NORM_L2
 import java.io.File
 import java.io.FileOutputStream
-import java.nio.file.FileStore
 
 class FaceRecognitionActivity : AppCompatActivity() {
     private lateinit var cameraProviderFuture : ListenableFuture<ProcessCameraProvider>
@@ -123,12 +122,12 @@ class FaceRecognitionActivity : AppCompatActivity() {
                     if(faceDetected!!.rows()!=1){
                         //Log.i("faceDetector","未检测到人脸")
                         faceScore = 0
-                        findViewById<TextView>(R.id.faceRecognizeNoteTextView).setText(R.string.face_detect_not_found_note)
+                        findViewById<TextView>(R.id.nameTextView).setText(R.string.face_detect_not_found_note)
                     }
                     else{
 
                         //Log.i("faceDetector","检测到人脸！得分：${faceDetected[0,14][0]}")
-                        findViewById<TextView>(R.id.faceRecognizeNoteTextView).setText(R.string.face_detect_detecting_note)
+                        findViewById<TextView>(R.id.nameTextView).setText(R.string.face_detect_detecting_note)
                         if(faceDetected[0,14][0]>0.99){//得分较高
                             //对人脸进行特征提取
                             //进行人脸对齐
@@ -165,12 +164,12 @@ class FaceRecognitionActivity : AppCompatActivity() {
                                         else if(mode == "matchFeature"){//需要返回一个识别结果时
                                             val originFeature = intent.getStringExtra("originFeature")
                                             val score =  faceRecognizer!!.match(matFromJson(originFeature), tempFaceFeature, FR_NORM_L2)
-                                            Log.i("matchFeature","源数据：${originFeature}")
-                                            Log.i("matchFeature","检测到的数据：${matToJson(tempFaceFeature!!)}")
-                                            Log.i("matchFeature","对比分数：${score}")
+                                            //Log.i("matchFeature","源数据：${originFeature}")
+                                            //Log.i("matchFeature","检测到的数据：${matToJson(tempFaceFeature!!)}")
+                                            //Log.i("matchFeature","对比分数：${score}")
                                             //对比来源脸
                                             if(score<l2ScoreThreshold){//符合
-                                                Log.i("matchFeature","符合")
+                                                //Log.i("matchFeature","符合")
                                                 val intent = Intent().apply {
                                                     putExtra("matchResult","ture")
                                                 }
@@ -191,7 +190,7 @@ class FaceRecognitionActivity : AppCompatActivity() {
                                                     recognizeFinished = true
                                                     finish()
                                                 }
-                                                Log.i("matchFeature","不符合")
+                                                //Log.i("matchFeature","不符合")
                                             }
                                         }
                                     }

@@ -30,7 +30,7 @@
                     android:layout_height="80dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="28dp"
-                    android:src="@drawable/test_avatar"
+                    android:src="@drawable/default_avatar"
                     app:civ_border_color="@android:color/white"
                     app:civ_border_width="3dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -38,7 +38,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/faceRecognizeNoteTextView"
+                    android:id="@+id/nameTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"

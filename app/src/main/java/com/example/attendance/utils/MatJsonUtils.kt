@@ -1,6 +1,5 @@
 package com.example.attendance.utils
 
-import kotlin.Throws
 import org.opencv.core.Mat
 import com.google.gson.JsonObject
 import org.opencv.core.CvType

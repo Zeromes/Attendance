@@ -2,7 +2,9 @@ package com.example.attendance
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -10,8 +12,10 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.attendance.data.UsingUserData.usingUserEmail
 import com.example.attendance.databinding.ActivityMainBinding
 import com.example.attendance.ui.profile.login.LoginActivity
+import com.example.attendance.ui.profile.register.RegisterActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -39,6 +43,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onClickProfile(view : View){
-        startActivity(Intent(this,LoginActivity::class.java))
+        if(usingUserEmail == null){
+            //尚未登录的情况
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivityForResult(intent,1)
+        }
+        else{
+            //已经登录的情况
+            
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == 1 && resultCode == 1){//成功登录
+            findViewById<TextView>(R.id.nameTextView).setText(data!!.getStringExtra("name"))
+        }
     }
 }

@@ -22,6 +22,7 @@
     <string name="conform_password_string">确认密码</string>
     <string name="name_string">姓名</string>
     <string name="face_data_commit_button_string">录入人脸数据</string>
+    <string name="face_data_recommit_button_string">重新录入人脸数据</string>
     <string name="face_data_uncommitted_note">人脸数据尚未录入！请点击下方按钮录入！</string>
     <string name="face_data_committed_note">人脸数据已录入</string>
 

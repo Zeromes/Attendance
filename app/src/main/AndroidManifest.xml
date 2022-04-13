@@ -3,6 +3,8 @@
     package="com.example.attendance">
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -12,12 +14,6 @@
         android:theme="@style/Theme.Attendance">
         <activity
             android:name=".ui.profile.faceRecognize.TestActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.profile.faceRecognize.testActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.profile.faceRecognize.TempActivity"
             android:exported="false" />
         <activity
             android:name=".ui.profile.faceRecognize.FaceRecognitionActivity"
