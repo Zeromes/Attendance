@@ -7,8 +7,7 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import com.example.attendance.R
-import com.example.attendance.data.UsingUserData.usingUserEmail
-import com.example.attendance.data.UsingUserData.usingUserName
+import com.example.attendance.data.UsingUserData
 import com.example.attendance.ui.profile.register.RegisterActivity
 import com.example.attendance.utils.HttpsUtils.post
 import com.example.attendance.utils.dataClass.UserData
@@ -54,8 +53,7 @@ class LoginActivity : AppCompatActivity() {
             //获取到一个Json字符串，对应UserLoginReturnData类
             val tempData : UserLoginReturnData = Gson().fromJson(it,UserLoginReturnData::class.java)
             if(tempData.state == "success"){
-                usingUserEmail = tempData.email
-                usingUserName = tempData.name
+                UsingUserData.setData(this,tempData.email,tempData.name)
                 val intent = Intent().apply {
                     putExtra("name",tempData.name)
                 }

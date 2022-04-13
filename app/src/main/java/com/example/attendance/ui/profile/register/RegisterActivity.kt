@@ -1,6 +1,5 @@
 package com.example.attendance.ui.profile.register
 
-import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -10,8 +9,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.attendance.R
 import com.example.attendance.data.UsingUserData
-import com.example.attendance.data.UsingUserData.usingUserEmail
-import com.example.attendance.data.UsingUserData.usingUserName
 import com.example.attendance.ui.profile.faceRecognize.FaceRecognitionActivity
 import com.example.attendance.utils.HttpsUtils.post
 import com.example.attendance.utils.dataClass.UserData
@@ -72,8 +69,8 @@ class RegisterActivity : AppCompatActivity() {
                 Toast.makeText(this,"该邮箱已经使用！",Toast.LENGTH_LONG).show()
             }
             else if(it == "success"){
-                usingUserEmail = email
-                usingUserName = name
+
+                UsingUserData.setData(this,email,name)
                 val intent = Intent().apply {
                     putExtra("name",name)
                 }

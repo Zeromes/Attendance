@@ -2,21 +2,19 @@ package com.example.attendance
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.attendance.data.UsingUserData
 import com.example.attendance.data.UsingUserData.usingUserEmail
 import com.example.attendance.databinding.ActivityMainBinding
 import com.example.attendance.ui.profile.login.LoginActivity
 import com.example.attendance.ui.profile.profileDetail.ProfileDetailActivity
-import com.example.attendance.ui.profile.register.RegisterActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        UsingUserData.initData(this)
         binding = ActivityMainBinding.inflate(layoutInflater)//构造一个ActivityMainBinding对象，并调用inflate方法
         setContentView(binding.root)//root是ActivityMainBinding对应的View对象，将界面设为这个view对象
 

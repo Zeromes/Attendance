@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import com.example.attendance.R
+import com.example.attendance.data.UsingUserData
 import com.example.attendance.data.UsingUserData.usingUserEmail
 import com.example.attendance.data.UsingUserData.usingUserName
 
@@ -24,8 +25,7 @@ class ProfileDetailActivity : AppCompatActivity() {
     }
 
     fun onClickLogout(view: View){
-        usingUserEmail = null
-        usingUserName = null
+        UsingUserData.clearData(this)
         val intent = Intent()
         setResult(1,intent)
         Toast.makeText(this,"已退出登录",Toast.LENGTH_LONG).show()
