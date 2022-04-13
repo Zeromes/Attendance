@@ -1,5 +1,7 @@
 package com.example.attendance.utils
 
+import android.app.ProgressDialog
+import android.content.Context
 import android.os.Looper
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -10,7 +12,8 @@ import java.net.URLEncoder
 import javax.net.ssl.HttpsURLConnection
 
 object HttpsUtils {
-    fun post(data : Any,method :String, successCallback : (String)->Unit, failCallback : ()->Unit){
+    fun post(data : Any,method :String,context: Context,loadingNote : String, successCallback : (String)->Unit, failCallback : ()->Unit){
+        val loadingDialog = ProgressDialog.show(context, "", "正在提交", true)
         //生成Json数据
         val gson = Gson()
         val jsonData = gson.toJson(data)
@@ -31,6 +34,7 @@ object HttpsUtils {
             dos.write(data)
             dos.flush()
             dos.close()
+            loadingDialog.dismiss()
             if(conn.responseCode == HttpURLConnection.HTTP_OK){
                 //请求成功
                 val result = String(conn.inputStream.readBytes(), charset("UTF-8"))

@@ -65,11 +65,9 @@ class RegisterActivity : AppCompatActivity() {
         }
         //向服务器发送数据注册账号
         //显示加载界面
-        val loadingDialog = ProgressDialog.show(this, "", "正在提交", true)
-        post(UserData(email, password, name, faceFeature!!),"register",{
+        post(UserData(email, password, name, faceFeature!!),"register",this,"正在提交",{
             //请求成功
             //Log.i("网络请求","请求成功：返回：$it")
-            loadingDialog.dismiss()
             if(it == "rep"){
                 Toast.makeText(this,"该邮箱已经使用！",Toast.LENGTH_LONG).show()
             }
@@ -86,7 +84,6 @@ class RegisterActivity : AppCompatActivity() {
         },{
             //请求失败
             //Log.e("网络请求","注册请求失败，返回码：${conn.responseCode}")
-            loadingDialog.dismiss()
             Toast.makeText(this,"网络错误！",Toast.LENGTH_LONG).show()
         })
 

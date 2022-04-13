@@ -1,5 +1,6 @@
 package com.example.attendance.ui.profile.login
 
+import android.app.ProgressDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -51,7 +52,7 @@ class LoginActivity : AppCompatActivity() {
             Toast.makeText(this,"请填写密码！",Toast.LENGTH_LONG).show()
             return
         }
-        post(UserData(email, password),"login",{
+        post(UserData(email, password),"login",this,"正在登录",{
             //获取到一个Json字符串，对应UserLoginReturnData类
             val tempData : UserLoginReturnData = Gson().fromJson(it,UserLoginReturnData::class.java)
             if(tempData.state == "success"){
