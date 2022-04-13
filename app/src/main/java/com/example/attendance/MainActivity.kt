@@ -15,6 +15,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.attendance.data.UsingUserData.usingUserEmail
 import com.example.attendance.databinding.ActivityMainBinding
 import com.example.attendance.ui.profile.login.LoginActivity
+import com.example.attendance.ui.profile.profileDetail.ProfileDetailActivity
 import com.example.attendance.ui.profile.register.RegisterActivity
 
 class MainActivity : AppCompatActivity() {
@@ -50,14 +51,18 @@ class MainActivity : AppCompatActivity() {
         }
         else{
             //已经登录的情况
-            
+            val intent = Intent(this, ProfileDetailActivity::class.java)
+            startActivityForResult(intent,2)
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == 1 && resultCode == 1){//成功登录
-            findViewById<TextView>(R.id.nameTextView).setText(data!!.getStringExtra("name"))
+            findViewById<TextView>(R.id.nameTextView).text = data!!.getStringExtra("name")
+        }
+        else if(requestCode == 2 && resultCode == 1){//退出登录了
+            findViewById<TextView>(R.id.nameTextView).setText(R.string.login_or_register)
         }
     }
 }

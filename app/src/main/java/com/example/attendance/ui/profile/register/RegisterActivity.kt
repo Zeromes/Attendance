@@ -82,9 +82,6 @@ class RegisterActivity : AppCompatActivity() {
                 finish()
             }
         },{
-            //请求失败
-            //Log.e("网络请求","注册请求失败，返回码：${conn.responseCode}")
-            Toast.makeText(this,"网络错误！",Toast.LENGTH_LONG).show()
         })
 
         /*//生成Json数据

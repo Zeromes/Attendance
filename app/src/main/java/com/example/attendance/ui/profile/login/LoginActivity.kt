@@ -1,10 +1,8 @@
 package com.example.attendance.ui.profile.login
 
-import android.app.ProgressDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
@@ -41,7 +39,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun onClickLogin(view: View){
-        val email = findViewById<TextView>(R.id.editTextLoginEmailAddress).text.toString()
+        val email = findViewById<TextView>(R.id.editTextLoginEmail).text.toString()
         val password = findViewById<TextView>(R.id.editTextLoginPassword).text.toString()
         //判断是否填写了所有数据
         if(email.isBlank()){
@@ -69,7 +67,6 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this,"账号或密码错误！",Toast.LENGTH_LONG).show()
             }
         },{
-            Toast.makeText(this,"网络错误！",Toast.LENGTH_LONG).show()
         })
     }
 }

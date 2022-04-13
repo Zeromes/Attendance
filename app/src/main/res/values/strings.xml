@@ -28,4 +28,10 @@
 
     <string name="face_detect_not_found_note">请将相机对准人脸</string>
     <string name="face_detect_detecting_note">检测中，请保持相机稳定</string>
+
+    <string name="logout_button_string">退出登录</string>
+    <string name="change_password_button_string">修改密码</string>
+    <string name="original_password">原密码</string>
+    <string name="new_password">新密码</string>
+
 </resources>

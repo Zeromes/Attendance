@@ -8,6 +8,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.attendance.R
+import com.example.attendance.data.UsingUserData.usingUserName
 import com.example.attendance.databinding.FragmentProfileBinding
 
 class ProfileFragment : Fragment() {
@@ -23,7 +25,12 @@ class ProfileFragment : Fragment() {
 
         _binding = FragmentProfileBinding.inflate(inflater, container, false)//获取FragmentProfileBinding对象，并调用inflate函数进行绘制
         val root: View = binding.root//获取对应的View对象
-
+        if(usingUserName != null){
+            binding.nameTextView.text = usingUserName
+        }
+        else{
+            binding.nameTextView.setText(R.string.login_or_register)
+        }
 //        val textView: TextView = binding.textNotifications
 //        notificationsViewModel.text.observe(viewLifecycleOwner) {
 //            textView.text = it

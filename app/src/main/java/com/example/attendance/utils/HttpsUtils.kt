@@ -3,6 +3,7 @@ package com.example.attendance.utils
 import android.app.ProgressDialog
 import android.content.Context
 import android.os.Looper
+import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
@@ -40,6 +41,7 @@ object HttpsUtils {
                 val result = String(conn.inputStream.readBytes(), charset("UTF-8"))
                 if(result == "error"){
                     //服务器应用出错
+                    Toast.makeText(context,"服务器错误！", Toast.LENGTH_LONG).show()
                     failCallback()
                 }
                 else{
@@ -49,6 +51,7 @@ object HttpsUtils {
             }
             else{
                 //请求失败
+                Toast.makeText(context,"请求失败！", Toast.LENGTH_LONG).show()
                 failCallback()
             }
         }.start()
