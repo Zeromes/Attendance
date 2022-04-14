@@ -13,12 +13,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Attendance">
         <activity
-            android:name=".ui.myAttendance.eventDetailActivity"
-            android:exported="false" />
+            android:name=".ui.myAttendance.EventDetailActivity"
+            android:exported="false"
+            android:label="@string/event_detail"/>
         <activity
             android:name=".ui.myAttendance.AddNewAttendanceActivity"
             android:exported="false"
-            android:label="@string/add_new_attendance" />
+            android:label="@string/edit_event" />
         <activity
             android:name=".ui.profile.profileDetail.ChangePasswordActivity"
             android:exported="false"

@@ -16,6 +16,7 @@ import com.example.attendance.data.UsingUserData
 import com.example.attendance.data.UsingUserData.usingUserEmail
 import com.example.attendance.databinding.ActivityMainBinding
 import com.example.attendance.ui.myAttendance.AddNewAttendanceActivity
+import com.example.attendance.ui.myAttendance.EventDetailActivity
 import com.example.attendance.ui.profile.login.LoginActivity
 import com.example.attendance.ui.profile.profileDetail.ProfileDetailActivity
 
@@ -59,8 +60,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onClickCreateAttendanceEvent(view: View){
-        //Toast.makeText(this,"创建考勤事件",Toast.LENGTH_LONG).show()
-        //TODO("未登录请先登录")
+        //未登录请先登录
         if(usingUserEmail == null){
             Toast.makeText(this,"请先登录！",Toast.LENGTH_LONG).show()
         }
@@ -81,8 +81,11 @@ class MainActivity : AppCompatActivity() {
         else if(requestCode == 3 && resultCode == 1){//创建考勤事件Activity的监听
             //获取到新创建的考勤事件的id
             val id = data!!.getStringExtra("id")
-            Log.i("创建考勤事件","返回了id：$id")
-            
+            //Log.i("创建考勤事件","返回了id：$id")
+            val intent = Intent(this, EventDetailActivity::class.java).apply {
+                putExtra("id", id)
+            }
+            startActivity(intent)
         }
     }
 }

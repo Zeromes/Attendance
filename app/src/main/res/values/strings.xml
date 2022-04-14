@@ -5,7 +5,10 @@
     <string name="title_notifications">个人信息</string>
     <string name="login_or_register">登录/注册</string>
     <string name="face_recognize">人脸识别</string>
-    <string name="add_new_attendance">新建考勤事件</string>
+    <string name="edit_event">编辑考勤事件</string>
+    <string name="event_detail">事件详情</string>
+    <string name="modify_event">修改事件</string>
+    <string name="archive_event">归档事件</string>
 
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>
@@ -54,4 +57,17 @@
     <string name="submit">提交</string>
     <string name="cross_day_warning_note">结束时间将会延续到次日！</string>
     <string name="interval_too_short_warning_note">结束时间与开始时间相距太近，建议大于十分钟！</string>
+
+
+    <string name="QR_code_use_note">上面的二维码用于给被考勤人员扫描考勤，可截图保存</string>
+
+    <string name="detail_id">ID：</string>
+    <string name="detail_name">事件名称：</string>
+    <string name="detail_creator_name">创建人：</string>
+    <string name="detail_cycle">事件周期：</string>
+    <string name="detail_date">事件日期：</string>
+    <string name="detail_repetition">重复：</string>
+    <string name="detail_start_time">开始时间：</string>
+    <string name="detail_end_time">结束时间：</string>
+
 </resources>
