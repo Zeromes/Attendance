@@ -2,8 +2,10 @@ package com.example.attendance
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -13,6 +15,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.attendance.data.UsingUserData
 import com.example.attendance.data.UsingUserData.usingUserEmail
 import com.example.attendance.databinding.ActivityMainBinding
+import com.example.attendance.ui.myAttendance.AddNewAttendanceActivity
 import com.example.attendance.ui.profile.login.LoginActivity
 import com.example.attendance.ui.profile.profileDetail.ProfileDetailActivity
 
@@ -55,6 +58,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun onClickCreateAttendanceEvent(view: View){
+        //Toast.makeText(this,"创建考勤事件",Toast.LENGTH_LONG).show()
+        //TODO("未登录请先登录")
+        if(usingUserEmail == null){
+            Toast.makeText(this,"请先登录！",Toast.LENGTH_LONG).show()
+        }
+        else{
+            val intent = Intent(this, AddNewAttendanceActivity::class.java)
+            startActivityForResult(intent,3)
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == 1 && resultCode == 1){//成功登录
@@ -62,6 +77,12 @@ class MainActivity : AppCompatActivity() {
         }
         else if(requestCode == 2 && resultCode == 1){//退出登录了
             findViewById<TextView>(R.id.nameTextView).setText(R.string.login_or_register)
+        }
+        else if(requestCode == 3 && resultCode == 1){//创建考勤事件Activity的监听
+            //获取到新创建的考勤事件的id
+            val id = data!!.getStringExtra("id")
+            Log.i("创建考勤事件","返回了id：$id")
+            
         }
     }
 }

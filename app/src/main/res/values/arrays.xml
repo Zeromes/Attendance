@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="cycle_type">
+        <item>一次性</item>
+        <item>每天</item>
+        <item>每星期</item>
+    </string-array>
+</resources>

@@ -13,17 +13,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Attendance">
         <activity
-            android:name=".ui.profile.profileDetail.ChangePasswordActivity"
+            android:name=".ui.myAttendance.eventDetailActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.myAttendance.AddNewAttendanceActivity"
+            android:exported="false"
+            android:label="@string/add_new_attendance" />
+        <activity
+            android:name=".ui.profile.profileDetail.ChangePasswordActivity"
+            android:exported="false"
+            android:label="@string/change_password_button_string" />
         <activity
             android:name=".ui.profile.profileDetail.ProfileDetailActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.profile.faceRecognize.TestActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/title_notifications" />
         <activity
             android:name=".ui.profile.faceRecognize.FaceRecognitionActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/face_recognize" />
         <activity
             android:name=".ui.profile.register.RegisterActivity"
             android:exported="false"

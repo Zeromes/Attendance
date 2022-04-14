@@ -4,6 +4,9 @@
     <string name="title_dashboard">我的考勤</string>
     <string name="title_notifications">个人信息</string>
     <string name="login_or_register">登录/注册</string>
+    <string name="face_recognize">人脸识别</string>
+    <string name="add_new_attendance">新建考勤事件</string>
+
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -34,4 +37,21 @@
     <string name="original_password">原密码</string>
     <string name="new_password">新密码</string>
 
+    <string name="attendance_event_name">事件名称</string>
+    <string name="event_cycle">事件周期</string>
+    <string name="date">日期</string>
+    <string name="start_time">开始时间</string>
+    <string name="end_time">结束时间</string>
+
+    <string name="Monday">星期一</string>
+    <string name="Tuesday">星期二</string>
+    <string name="Wednesday">星期三</string>
+    <string name="Thursday">星期四</string>
+    <string name="Friday">星期五</string>
+    <string name="Saturday">星期六</string>
+    <string name="Sunday">星期日</string>
+
+    <string name="submit">提交</string>
+    <string name="cross_day_warning_note">结束时间将会延续到次日！</string>
+    <string name="interval_too_short_warning_note">结束时间与开始时间相距太近，建议大于十分钟！</string>
 </resources>
