@@ -86,7 +86,7 @@ class EventDetailActivity : AppCompatActivity() {
     }
 
     fun onClickArchiveEvent(view: View){
-        
+
     }
 
 }

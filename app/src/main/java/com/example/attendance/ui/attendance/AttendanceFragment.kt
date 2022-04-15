@@ -1,18 +1,16 @@
-package com.example.attendance.ui.myAttendance
+package com.example.attendance.ui.attendance
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.attendance.R
 import com.example.attendance.databinding.FragmentAttendanceBinding
+import com.example.attendance.databinding.FragmentMyAttendanceBinding
 import com.scwang.smart.refresh.footer.ClassicsFooter
 import com.scwang.smart.refresh.header.ClassicsHeader
 import com.scwang.smart.refresh.layout.api.RefreshLayout
-import com.scwang.smart.refresh.layout.listener.OnRefreshListener
 
 class AttendanceFragment : Fragment() {
 
@@ -20,21 +18,17 @@ class AttendanceFragment : Fragment() {
 
     // This property is only valid between onCreateView and
     // onDestroyView.
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(AttendanceViewModel::class.java)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        val dashboardViewModel = ViewModelProvider(this)[AttendanceViewModel::class.java]
 
         _binding = FragmentAttendanceBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-//        val textView: TextView = binding.textHome
-//        homeViewModel.text.observe(viewLifecycleOwner) {
+//        val textView: TextView = binding.textDashboard
+//        dashboardViewModel.text.observe(viewLifecycleOwner) {
 //            textView.text = it
 //        }
 
@@ -54,5 +48,4 @@ class AttendanceFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }

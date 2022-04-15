@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/navigation_attendance"
-        android:name="com.example.attendance.ui.myAttendance.AttendanceFragment"
+        android:name="com.example.attendance.ui.attendance.AttendanceFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_attendance" />
 
     <fragment
         android:id="@+id/navigation_my_attendance"
-        android:name="com.example.attendance.ui.attendance.MyAttendanceFragment"
+        android:name="com.example.attendance.ui.myAttendance.MyAttendanceFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_my_attendance" />
 
