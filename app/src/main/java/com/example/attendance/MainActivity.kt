@@ -1,12 +1,13 @@
 package com.example.attendance
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -19,6 +20,14 @@ import com.example.attendance.ui.myAttendance.AddNewAttendanceActivity
 import com.example.attendance.ui.myAttendance.EventDetailActivity
 import com.example.attendance.ui.profile.login.LoginActivity
 import com.example.attendance.ui.profile.profileDetail.ProfileDetailActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import me.devilsen.czxing.Scanner
+import me.devilsen.czxing.util.BarCodeUtil
+import me.devilsen.czxing.view.ScanActivityDelegate.OnClickAlbumDelegate
+import me.devilsen.czxing.view.ScanActivityDelegate.OnScanDelegate
+import me.devilsen.czxing.view.ScanView
+import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -67,6 +76,36 @@ class MainActivity : AppCompatActivity() {
         else{
             val intent = Intent(this, AddNewAttendanceActivity::class.java)
             startActivityForResult(intent,3)
+        }
+    }
+
+    fun onClickScanQRCode(view: View){
+        //未登录请先登录
+        if(usingUserEmail == null){
+            Toast.makeText(this,"请先登录！",Toast.LENGTH_LONG).show()
+        }
+        else{
+            Scanner.with(this)
+                .setScanMode(ScanView.SCAN_MODE_TINY) // 扫描区域 0：混合 1：只扫描框内 2：只扫描整个屏幕
+                .setTitle("扫码考勤") // 扫码界面标题
+                .showAlbum(false) // 显示相册(默认为true)
+                .setScanNoticeText("将二维码置于框中") // 设置扫码文字提示
+                .setFlashLightInvisible() // 不使用闪光灯图标及提示
+                .enableOpenCVDetect(true)// OpenCV探测
+                .setOnScanResultDelegate(OnScanDelegate { activity, result, format ->
+
+                    Log.i("扫码","activity：$activity")
+                    Log.i("扫码","结果：$result")
+                    Log.i("扫码","format：$format")
+                    // 接管扫码成功的数据
+                    /*val intent = Intent(
+                        this@MainActivity,
+                        DelegateActivity::class.java
+                    )
+                    intent.putExtra("result", result)
+                    startActivity(intent)*/
+                })
+                .start()
         }
     }
 

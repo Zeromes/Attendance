@@ -1,16 +1,21 @@
 package com.example.attendance.ui.myAttendance
 
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.example.attendance.R
 import com.example.attendance.utils.HttpsUtils.post
 import com.example.attendance.utils.dataClass.EventDetailData
-import com.example.attendance.utils.dataClass.UserLoginReturnData
 import com.google.gson.Gson
+import me.devilsen.czxing.code.BarcodeWriter
+import me.devilsen.czxing.util.BarCodeUtil
+
 
 class EventDetailActivity : AppCompatActivity() {
     private var data : EventDetailData? = null
@@ -25,6 +30,13 @@ class EventDetailActivity : AppCompatActivity() {
             data = Gson().fromJson(it, EventDetailData::class.java)
             runOnUiThread {
                 //渲染界面
+                //渲染二维码
+                val codeBitmap: Bitmap = BarcodeWriter().write(
+                    "AttendanceSystemQRCode${data!!.id}",
+                    BarCodeUtil.dp2px(this, 300f)
+                )
+                findViewById<ImageView>(R.id.QRCodeImageView).setImageBitmap(codeBitmap)
+                //渲染其他
                 findViewById<TextView>(R.id.detailIDTextView).text = data!!.id.toString()
                 findViewById<TextView>(R.id.detailNameTextView).text = data!!.name
                 findViewById<TextView>(R.id.detailCreatorTextView).text = data!!.creatorName
