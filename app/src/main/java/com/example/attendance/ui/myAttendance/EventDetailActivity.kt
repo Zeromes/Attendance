@@ -5,10 +5,13 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.baidu.mapapi.map.*
+import com.baidu.mapapi.model.LatLng
 import com.example.attendance.R
 import com.example.attendance.utils.HttpsUtils.post
 import com.example.attendance.utils.dataClass.EventDetailData
@@ -19,6 +22,7 @@ import me.devilsen.czxing.util.BarCodeUtil
 
 class EventDetailActivity : AppCompatActivity() {
     private var data : EventDetailData? = null
+    private var mMapView : TextureMapView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event_detail)
@@ -87,10 +91,66 @@ class EventDetailActivity : AppCompatActivity() {
                 //开始和结束时间
                 findViewById<TextView>(R.id.detailStartTimeTextView).text = "${data!!.startHour}:${data!!.startMinute}"
                 findViewById<TextView>(R.id.detailEndTimeTextView).text = "${data!!.endHour}:${data!!.endMinute}"
+
+                //渲染地图
+                val options = BaiduMapOptions()
+                    .compassEnabled(true)
+                    .rotateGesturesEnabled(false)
+                    .scrollGesturesEnabled(false)
+                    .overlookingGesturesEnabled(false)
+                    .zoomGesturesEnabled(false)
+                val mapView = TextureMapView(this, options)
+                mapView.map.uiSettings.setAllGesturesEnabled(false)
+                val layout : FrameLayout = findViewById(R.id.detailMapLayout)
+                mapView!!.map.run {
+                    clear()
+                    //重新显示圆
+                    //在地图上显示圆
+                    addOverlay(
+                        CircleOptions().center(LatLng(data!!.latitude.toDouble(), data!!.longitude.toDouble()))
+                        .radius(data!!.locationRange.toInt())
+                        .fillColor(getColor(R.color.translucent_range_blue)) //填充颜色
+                        //.stroke(Stroke(5, -0x55ff0100)) //边框宽和边框颜色
+                    )
+                    //显示mark标记
+                    addOverlay(
+                        MarkerOptions()
+                        .position(LatLng(data!!.latitude.toDouble(),data!!.longitude.toDouble()))
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pointer))
+                    )
+                    setMapStatus(
+                        MapStatusUpdateFactory.newMapStatus(
+                            MapStatus.Builder()//定义地图状态
+                        .target(LatLng(data!!.latitude.toDouble(),data!!.longitude.toDouble()))
+                        .zoom(18F)
+                        .build()
+                    ))
+                }
+                layout.addView(mapView)
+                mMapView = mapView
             }
         },{
 
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
+        mMapView?.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        //在activity执行onResume时执行mMapView. onPause ()，实现地图生命周期管理
+        mMapView?.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        //在activity执行onResume时执行mMapView. onDestroy ()，实现地图生命周期管理
+        mMapView?.onDestroy()
+        mMapView=null
     }
 
     fun onClickEditEvent(view: View){
@@ -100,5 +160,6 @@ class EventDetailActivity : AppCompatActivity() {
     fun onClickArchiveEvent(view: View){
 
     }
+
 
 }

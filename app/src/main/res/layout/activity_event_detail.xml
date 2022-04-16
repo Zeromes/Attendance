@@ -190,6 +190,22 @@
                     android:textSize="20sp" />
             </LinearLayout>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:text="@string/attendance_position"
+                android:textSize="20sp" />
+
+            <FrameLayout
+                android:id="@+id/detailMapLayout"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_gravity="center"
+                android:layout_marginVertical="30dp">
+
+            </FrameLayout>
+
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="60dp"

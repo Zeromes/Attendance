@@ -9,6 +9,7 @@
     <string name="event_detail">事件详情</string>
     <string name="modify_event">修改事件</string>
     <string name="archive_event">归档事件</string>
+    <string name="confirm">确认</string>
 
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>
@@ -53,6 +54,11 @@
     <string name="Friday">星期五</string>
     <string name="Saturday">星期六</string>
     <string name="Sunday">星期日</string>
+    <string name="attendance_position">考勤地点</string>
+    <string name="attendance_location_range">考勤范围</string>
+    <string name="attendance_location_range_note">范围大小</string>
+    <string name="select_attendance_position">选择地点</string>
+    <string name="select_position_note">将屏幕中心拖到想要的位置\n</string>
 
     <string name="submit">提交</string>
     <string name="cross_day_warning_note">结束时间将会延续到次日！</string>

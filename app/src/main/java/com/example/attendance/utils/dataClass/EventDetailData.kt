@@ -20,4 +20,7 @@ data class EventDetailData(
     val startMinute : String,
     val endHour : String,
     val endMinute : String,
+    val latitude : String,
+    val longitude : String,
+    val locationRange : String,
 )
