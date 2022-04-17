@@ -1,7 +1,7 @@
 package com.example.attendance.utils.dataClass
 
 data class EventDetailData(
-    val state : String,
+    val state : String?,
     val id : Int,
     val name : String,
     val creatorName : String?,

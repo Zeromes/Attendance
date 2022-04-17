@@ -36,10 +36,10 @@ class AttendanceFragment : Fragment() {
         refreshLayout.setRefreshHeader(ClassicsHeader(this.context))
         refreshLayout.setRefreshFooter(ClassicsFooter(this.context))
         refreshLayout.setOnRefreshListener {
-            it.finishRefresh(2000/*,false*/);//传入false表示刷新失败
+            it.finishRefresh(1000/*,false*/);//传入false表示刷新失败
         }
         refreshLayout.setOnLoadMoreListener {
-            it.finishLoadMore(2000/*,false*/);//传入false表示加载失败
+            it.finishLoadMore(1000/*,false*/);//传入false表示加载失败
         }
         return root
     }

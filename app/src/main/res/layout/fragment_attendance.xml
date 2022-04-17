@@ -14,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srlFooterTranslationViewId="@id/hitoryScrollView">
+        app:srlFooterTranslationViewId="@id/historyRecyclerView">
 
         <com.scwang.smart.refresh.header.ClassicsHeader
             android:layout_width="match_parent"
@@ -25,50 +25,6 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <ScrollView
-                android:id="@+id/hitoryScrollView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:paddingTop="160dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="300dp"
-                        android:layout_margin="20dp"
-                        app:cardBackgroundColor="#3F51B5" />
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="300dp"
-                        android:layout_margin="20dp"
-                        app:cardBackgroundColor="#3F51B5" />
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="300dp"
-                        android:layout_margin="20dp"
-                        app:cardBackgroundColor="#3F51B5" />
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="300dp"
-                        android:layout_margin="20dp"
-                        app:cardBackgroundColor="#3F51B5" />
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="300dp"
-                        android:layout_margin="20dp"
-                        app:cardBackgroundColor="#3F51B5" />
-                </LinearLayout>
-            </ScrollView>
 
             <FrameLayout
                 android:layout_width="match_parent"

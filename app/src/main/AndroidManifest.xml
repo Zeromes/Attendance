@@ -25,7 +25,8 @@
         android:theme="@style/Theme.Attendance">
         <activity
             android:name=".ui.myAttendance.MapActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/select_location"/>
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
