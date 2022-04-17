@@ -46,9 +46,6 @@ class AddNewAttendanceActivity : AppCompatActivity() {
     private var selectedLongitude : Double? = null
     private var selectedRange : Int = 50
 
-    private var selfLatitude : Double? = null
-    private var selfLongitude : Double? = null
-
     private var isBadTime = false
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -87,6 +84,8 @@ class AddNewAttendanceActivity : AppCompatActivity() {
         SDKInitializer.initialize(applicationContext)*/
 
         setContentView(R.layout.activity_add_new_attendance)
+
+        //显示地图
         val options = BaiduMapOptions()
             .compassEnabled(true)
             .rotateGesturesEnabled(false)
@@ -98,8 +97,155 @@ class AddNewAttendanceActivity : AppCompatActivity() {
         val layout : FrameLayout = findViewById(R.id.mapLayout)
         layout.addView(mapView)
         mMapView = mapView
-        mLocationClient!!.start()
 
+        if(intent.getStringExtra("id")!=null){//用于修改的情况
+            //Toast.makeText(this,"获取到了id",Toast.LENGTH_SHORT).show()
+            //用已有的数据渲染界面
+            findViewById<EditText>(R.id.editTextAttendanceEventName).setText(intent.getStringExtra("name")!!)
+            selectedCycle = intent.getStringExtra("cycle")!!
+
+            selectedStartHour = intent.getStringExtra("startHour")!!
+            selectedStartMinute = intent.getStringExtra("startMinute")!!
+            selectedEndHour = intent.getStringExtra("endHour")!!
+            selectedEndMinute = intent.getStringExtra("endMinute")!!
+            selectedLatitude = intent.getStringExtra("latitude")!!.toDouble()
+            selectedLongitude = intent.getStringExtra("longitude")!!.toDouble()
+            selectedRange = intent.getStringExtra("locationRange")!!.toInt()
+            when(selectedCycle){
+                "一次性"->{
+                    findViewById<Spinner>(R.id.cycleSpinner).setSelection(0)
+                    selectedYear = intent.getStringExtra("year")
+                    selectedMonth = intent.getStringExtra("month")
+                    selectedDay = intent.getStringExtra("day")
+                }
+                "每天"->{
+                    findViewById<Spinner>(R.id.cycleSpinner).setSelection(1)
+                }
+                "每星期"->{
+                    findViewById<Spinner>(R.id.cycleSpinner).setSelection(2)
+                    if(intent.getStringExtra("weekday1") == "true"){
+                        findViewById<CheckBox>(R.id.weekdayCheckBox1).isChecked = true
+                    }
+                    if(intent.getStringExtra("weekday2") == "true"){
+                        findViewById<CheckBox>(R.id.weekdayCheckBox2).isChecked = true
+                    }
+                    if(intent.getStringExtra("weekday3") == "true"){
+                        findViewById<CheckBox>(R.id.weekdayCheckBox3).isChecked = true
+                    }
+                    if(intent.getStringExtra("weekday4") == "true"){
+                        findViewById<CheckBox>(R.id.weekdayCheckBox4).isChecked = true
+                    }
+                    if(intent.getStringExtra("weekday5") == "true"){
+                        findViewById<CheckBox>(R.id.weekdayCheckBox5).isChecked = true
+                    }
+                    if(intent.getStringExtra("weekday6") == "true"){
+                        findViewById<CheckBox>(R.id.weekdayCheckBox6).isChecked = true
+                    }
+                    if(intent.getStringExtra("weekday7") == "true"){
+                        findViewById<CheckBox>(R.id.weekdayCheckBox7).isChecked = true
+                    }
+                }
+            }
+            if(selectedYear != null){
+                val displayMonth = if(selectedMonth!!.toInt()<10) "0$selectedMonth" else selectedMonth
+                val displayDay = if(selectedDay!!.toInt()<10) "0$selectedDay" else selectedDay
+                findViewById<TextView>(R.id.dateTextView).text = "${selectedYear}年${displayMonth}月${displayDay}日"
+            }
+            var displayHour = if(selectedStartHour!!.toInt()<10) "0$selectedStartHour" else selectedStartHour
+            var displayMinute = if(selectedStartMinute!!.toInt()<10) "0$selectedStartMinute" else selectedStartMinute
+            findViewById<TextView>(R.id.startTimeTextView).text = "${displayHour}:${displayMinute}"
+            displayHour = if(selectedEndHour!!.toInt()<10) "0$selectedEndHour" else selectedEndHour
+            displayMinute = if(selectedEndMinute!!.toInt()<10) "0$selectedEndMinute" else selectedEndMinute
+            findViewById<TextView>(R.id.endTimeTextView).text = "${displayHour}:${displayMinute}"
+            findViewById<SeekBar>(R.id.rangeSeekBar).progress = selectedRange
+            findViewById<TextView>(R.id.rangeText).text = "$selectedRange 米"
+            //注册seekbar的监听
+            findViewById<SeekBar>(R.id.rangeSeekBar).setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                    selectedRange = progress
+                    findViewById<TextView>(R.id.rangeText).text = "$selectedRange 米"
+                    //在地图上显示圆
+                    resetMapOverlay()
+                }
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                }
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                }
+
+            })
+            resetMapOverlay()
+        }
+        else{//用于新建的情况
+            //Toast.makeText(this,"未获取到id",Toast.LENGTH_SHORT).show()
+            LocationClient.setAgreePrivacy(true)
+            //声明LocationClient类
+            mLocationClient = LocationClient(applicationContext)
+            //注册监听函数
+            mLocationClient!!.registerLocationListener(object : BDAbstractLocationListener() {
+                //定位的回调
+                override fun onReceiveLocation(location: BDLocation?) {
+                    //此处的BDLocation为定位结果信息类，通过它的各种get方法可获取定位相关的全部结果
+                    //以下只列举部分获取经纬度相关（常用）的结果信息
+                    //更多结果信息获取说明，请参照类参考中BDLocation类中的说明
+                    val latitude = location!!.latitude //获取纬度信息
+                    val longitude = location.longitude //获取经度信息
+
+                    //定义Maker坐标点
+                    val point = LatLng(latitude, longitude)
+                    //构建Marker图标
+                    val bitmap = BitmapDescriptorFactory
+                        .fromResource(R.drawable.ic_pointer)
+                    //构建MarkerOption，用于在地图上添加Marker
+                    val option: OverlayOptions = MarkerOptions()
+                        .position(point)
+                        .icon(bitmap)
+                    //在地图上添加Marker，并显示
+                    mMapView!!.map.addOverlay(option)
+
+                    val cenPt = LatLng(latitude,longitude)  //设定中心点坐标
+
+                    val mMapStatus : MapStatus = MapStatus.Builder()//定义地图状态
+                        .target(cenPt)
+                        .zoom(18F)
+                        .build()  //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
+                    val mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus)
+                    mMapView!!.map.setMapStatus(mMapStatusUpdate)//改变地图状态
+                    selectedLatitude = latitude
+                    selectedLongitude = longitude
+                    mLocationClient!!.stop()
+                    findViewById<SeekBar>(R.id.rangeSeekBar).setProgress(50,true)
+                    selectedRange = 50
+                    findViewById<TextView>(R.id.rangeText).text = "$selectedRange 米"
+                    resetMapOverlay()
+
+                    //获取到位置之后再注册seekbar的监听
+                    findViewById<SeekBar>(R.id.rangeSeekBar).setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+                        override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                            selectedRange = progress
+                            findViewById<TextView>(R.id.rangeText).text = "$selectedRange 米"
+                            //在地图上显示圆
+                            resetMapOverlay()
+                        }
+                        override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                        }
+                        override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                        }
+
+                    })
+                }
+            })
+            mLocationClient!!.locOption = LocationClientOption().apply {
+                setCoorType("bd09ll")
+                setFirstLocType(LocationClientOption.FirstLocType.ACCURACY_IN_FIRST_LOC)
+                setOnceLocation(true)
+                isOpenGps = true
+                isLocationNotify = true
+            }
+            //开始定位
+            mLocationClient!!.start()
+        }
+
+        //注册Spinner的选择回调
         findViewById<Spinner>(R.id.cycleSpinner).onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 selectedCycle = parent!!.getItemAtPosition(position).toString()
@@ -138,71 +284,6 @@ class AddNewAttendanceActivity : AppCompatActivity() {
                     Manifest.permission.ACCESS_FINE_LOCATION),1)
         }
         else{
-            LocationClient.setAgreePrivacy(true)
-            //声明LocationClient类
-            mLocationClient = LocationClient(applicationContext)
-            //注册监听函数
-            mLocationClient!!.registerLocationListener(object : BDAbstractLocationListener() {
-                override fun onReceiveLocation(location: BDLocation?) {
-                    //此处的BDLocation为定位结果信息类，通过它的各种get方法可获取定位相关的全部结果
-                    //以下只列举部分获取经纬度相关（常用）的结果信息
-                    //更多结果信息获取说明，请参照类参考中BDLocation类中的说明
-                    val latitude = location!!.latitude //获取纬度信息
-                    val longitude = location.longitude //获取经度信息
-
-                    //定义Maker坐标点
-                    val point = LatLng(latitude, longitude)
-                    //构建Marker图标
-                    val bitmap = BitmapDescriptorFactory
-                        .fromResource(R.drawable.ic_pointer)
-                    //构建MarkerOption，用于在地图上添加Marker
-                    val option: OverlayOptions = MarkerOptions()
-                        .position(point)
-                        .icon(bitmap)
-                    //在地图上添加Marker，并显示
-                    mMapView!!.map.addOverlay(option)
-
-                    val cenPt = LatLng(latitude,longitude)  //设定中心点坐标
-
-                    val mMapStatus : MapStatus = MapStatus.Builder()//定义地图状态
-                        .target(cenPt)
-                        .zoom(18F)
-                        .build()  //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
-                    val mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus)
-                    mMapView!!.map.setMapStatus(mMapStatusUpdate)//改变地图状态
-                    selectedLatitude = latitude
-                    selectedLongitude = longitude
-                    selfLatitude = latitude
-                    selfLongitude = longitude
-                    mLocationClient!!.stop()
-                    findViewById<SeekBar>(R.id.rangeSeekBar).setProgress(50,true)
-                    selectedRange = 50
-                    findViewById<TextView>(R.id.rangeText).text = "$selectedRange 米"
-                    resetMapOverlay()
-
-                    //获取到位置之后再注册seekbar的监听
-                    findViewById<SeekBar>(R.id.rangeSeekBar).setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
-                        override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                            selectedRange = progress
-                            findViewById<TextView>(R.id.rangeText).text = "$selectedRange 米"
-                            //在地图上显示圆
-                            resetMapOverlay()
-                        }
-                        override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                        }
-                        override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                        }
-
-                    })
-                }
-            })
-            mLocationClient!!.locOption = LocationClientOption().apply {
-                setCoorType("bd09ll")
-                setFirstLocType(LocationClientOption.FirstLocType.ACCURACY_IN_FIRST_LOC)
-                setOnceLocation(true)
-                isOpenGps = true
-                isLocationNotify = true
-            }
             renderUI()
         }
     }
@@ -299,7 +380,11 @@ class AddNewAttendanceActivity : AppCompatActivity() {
             val displayMonth = if(month+1<10) "0$selectedMonth" else selectedMonth
             val displayDay = if(dayOfMonth<10) "0$selectedDay" else selectedDay
             findViewById<TextView>(R.id.dateTextView).text = "${selectedYear}年${displayMonth}月${displayDay}日"
-        },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show()
+        },
+            if(selectedYear == null)calendar.get(Calendar.YEAR) else selectedYear!!.toInt(),
+            if(selectedMonth == null)calendar.get(Calendar.MONTH) else selectedMonth!!.toInt()-1,
+            if(selectedDay == null)calendar.get(Calendar.DAY_OF_MONTH) else selectedDay!!.toInt()
+        ).show()
     }
 
     fun onClickStartTimePicker(view: View){
@@ -312,7 +397,11 @@ class AddNewAttendanceActivity : AppCompatActivity() {
             val displayMinute = if(minute<10) "0$selectedStartMinute" else selectedStartMinute
             findViewById<TextView>(R.id.startTimeTextView).text = "${displayHour}:${displayMinute}"
             checkTime()
-        },calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),true).show()
+        },
+            if(selectedStartHour == null)calendar.get(Calendar.HOUR_OF_DAY) else selectedStartHour!!.toInt(),
+            if(selectedStartMinute == null)calendar.get(Calendar.MINUTE) else selectedStartMinute!!.toInt(),
+            true
+        ).show()
     }
 
     fun onClickEndTimePicker(view: View){
@@ -325,11 +414,14 @@ class AddNewAttendanceActivity : AppCompatActivity() {
             val displayMinute = if(minute<10) "0$selectedEndMinute" else selectedEndMinute
             findViewById<TextView>(R.id.endTimeTextView).text = "${displayHour}:${displayMinute}"
             checkTime()
-        },calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),true).show()
+        },
+            if(selectedEndHour == null)calendar.get(Calendar.HOUR_OF_DAY) else selectedEndHour!!.toInt(),
+            if(selectedEndMinute == null)calendar.get(Calendar.MINUTE) else selectedEndMinute!!.toInt(),
+            true
+        ).show()
     }
 
     fun onClickSubmit(view: View){
-        Log.i("提交数据","纬度：$selectedLatitude 经度:$selectedLongitude")
         //判空
         if(findViewById<EditText>(R.id.editTextAttendanceEventName).text.toString().isBlank()){
             Toast.makeText(this,"请填写事件名称！",Toast.LENGTH_LONG).show()
@@ -367,39 +459,74 @@ class AddNewAttendanceActivity : AppCompatActivity() {
             submitDay = "null"
         }
 
+        if(intent.getStringExtra("id")!=null){//用于修改的情况
+            post(HashMap<String,String>().apply {
+                put("id", intent.getStringExtra("id")!!)
+                put("name",findViewById<EditText>(R.id.editTextAttendanceEventName).text.toString())
+                put("creatorEmail",usingUserEmail!!)
+                put("cycle",selectedCycle)
+                put("year",submitYear!!)
+                put("month",submitMonth!!)
+                put("day",submitDay!!)
+                put("weekday1",findViewById<CheckBox>(R.id.weekdayCheckBox1).isChecked.toString())
+                put("weekday2",findViewById<CheckBox>(R.id.weekdayCheckBox2).isChecked.toString())
+                put("weekday3",findViewById<CheckBox>(R.id.weekdayCheckBox3).isChecked.toString())
+                put("weekday4",findViewById<CheckBox>(R.id.weekdayCheckBox4).isChecked.toString())
+                put("weekday5",findViewById<CheckBox>(R.id.weekdayCheckBox5).isChecked.toString())
+                put("weekday6",findViewById<CheckBox>(R.id.weekdayCheckBox6).isChecked.toString())
+                put("weekday7",findViewById<CheckBox>(R.id.weekdayCheckBox7).isChecked.toString())
+                put("startHour",selectedStartHour!!)
+                put("startMinute",selectedStartMinute!!)
+                put("endHour",selectedEndHour!!)
+                put("endMinute",selectedEndMinute!!)
+                put("latitude", selectedLatitude!!.toString())
+                put("longitude", selectedLongitude!!.toString())
+                put("locationRange", selectedRange.toString())
+            },"editEvent",this,"正在提交",{
+                //Log.i("创建考勤事件","返回了id：$it")
+                //返回给显示详情的activity
+                Toast.makeText(this,"修改成功",Toast.LENGTH_LONG).show()
+                setResult(2)
+                finish()
+            },{
 
-        post(HashMap<String,String>().apply {
-            put("name",findViewById<EditText>(R.id.editTextAttendanceEventName).text.toString())
-            put("creatorEmail",usingUserEmail!!)
-            put("cycle",selectedCycle)
-            put("year",submitYear!!)
-            put("month",submitMonth!!)
-            put("day",submitDay!!)
-            put("weekday1",findViewById<CheckBox>(R.id.weekdayCheckBox1).isChecked.toString())
-            put("weekday2",findViewById<CheckBox>(R.id.weekdayCheckBox2).isChecked.toString())
-            put("weekday3",findViewById<CheckBox>(R.id.weekdayCheckBox3).isChecked.toString())
-            put("weekday4",findViewById<CheckBox>(R.id.weekdayCheckBox4).isChecked.toString())
-            put("weekday5",findViewById<CheckBox>(R.id.weekdayCheckBox5).isChecked.toString())
-            put("weekday6",findViewById<CheckBox>(R.id.weekdayCheckBox6).isChecked.toString())
-            put("weekday7",findViewById<CheckBox>(R.id.weekdayCheckBox7).isChecked.toString())
-            put("startHour",selectedStartHour!!)
-            put("startMinute",selectedStartMinute!!)
-            put("endHour",selectedEndHour!!)
-            put("endMinute",selectedEndMinute!!)
-            put("latitude", selectedLatitude!!.toString())
-            put("longitude", selectedLongitude!!.toString())
-            put("locationRange", selectedRange.toString())
-        },"addNewEvent",this,"正在提交",{
-            //Log.i("创建考勤事件","返回了id：$it")
-            //返回给上一个activity，调用另一个activitiy用来显示该考勤事件的详细信息
-            val intent = Intent().apply {
-                putExtra("id",it)
-            }
-            setResult(1,intent)
-            finish()
-        },{
+            })
+        }
+        else{//用于新建的情况
+            post(HashMap<String,String>().apply {
+                put("name",findViewById<EditText>(R.id.editTextAttendanceEventName).text.toString())
+                put("creatorEmail",usingUserEmail!!)
+                put("cycle",selectedCycle)
+                put("year",submitYear!!)
+                put("month",submitMonth!!)
+                put("day",submitDay!!)
+                put("weekday1",findViewById<CheckBox>(R.id.weekdayCheckBox1).isChecked.toString())
+                put("weekday2",findViewById<CheckBox>(R.id.weekdayCheckBox2).isChecked.toString())
+                put("weekday3",findViewById<CheckBox>(R.id.weekdayCheckBox3).isChecked.toString())
+                put("weekday4",findViewById<CheckBox>(R.id.weekdayCheckBox4).isChecked.toString())
+                put("weekday5",findViewById<CheckBox>(R.id.weekdayCheckBox5).isChecked.toString())
+                put("weekday6",findViewById<CheckBox>(R.id.weekdayCheckBox6).isChecked.toString())
+                put("weekday7",findViewById<CheckBox>(R.id.weekdayCheckBox7).isChecked.toString())
+                put("startHour",selectedStartHour!!)
+                put("startMinute",selectedStartMinute!!)
+                put("endHour",selectedEndHour!!)
+                put("endMinute",selectedEndMinute!!)
+                put("latitude", selectedLatitude!!.toString())
+                put("longitude", selectedLongitude!!.toString())
+                put("locationRange", selectedRange.toString())
+            },"addNewEvent",this,"正在提交",{
+                //Log.i("创建考勤事件","返回了id：$it")
+                //返回给上一个activity，调用另一个activitiy用来显示该考勤事件的详细信息
+                val intent = Intent().apply {
+                    putExtra("id",it)
+                }
+                setResult(1,intent)
+                finish()
+            },{
 
-        })
+            })
+        }
+
     }
 
     fun onClickSelectPosition(view: View){

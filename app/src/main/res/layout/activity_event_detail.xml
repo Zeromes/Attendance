@@ -220,7 +220,8 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginVertical="10dp"
                 android:onClick="onClickArchiveEvent"
-                android:text="@string/archive_event" />
+                android:text="@string/archive_event"
+                android:visibility="gone" />
 
         </LinearLayout>
     </ScrollView>
