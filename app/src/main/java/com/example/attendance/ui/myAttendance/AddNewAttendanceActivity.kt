@@ -200,7 +200,7 @@ class AddNewAttendanceActivity : AppCompatActivity() {
                         .position(point)
                         .icon(bitmap)
                     //在地图上添加Marker，并显示
-                    mMapView!!.map.addOverlay(option)
+                    mMapView?.map?.addOverlay(option)
 
                     val cenPt = LatLng(latitude,longitude)  //设定中心点坐标
 
@@ -209,10 +209,10 @@ class AddNewAttendanceActivity : AppCompatActivity() {
                         .zoom(18F)
                         .build()  //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
                     val mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus)
-                    mMapView!!.map.setMapStatus(mMapStatusUpdate)//改变地图状态
+                    mMapView?.map?.setMapStatus(mMapStatusUpdate)//改变地图状态
                     selectedLatitude = latitude
                     selectedLongitude = longitude
-                    mLocationClient!!.stop()
+                    mLocationClient?.stop()
                     findViewById<SeekBar>(R.id.rangeSeekBar).setProgress(50,true)
                     selectedRange = 50
                     findViewById<TextView>(R.id.rangeText).text = "$selectedRange 米"
@@ -553,7 +553,7 @@ class AddNewAttendanceActivity : AppCompatActivity() {
     }
 
     fun resetMapOverlay(){
-        mMapView!!.map.run {
+        mMapView?.map?.run {
             clear()
             //重新显示圆
             //在地图上显示圆

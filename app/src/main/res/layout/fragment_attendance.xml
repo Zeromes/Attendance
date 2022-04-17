@@ -14,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srlFooterTranslationViewId="@id/eventListRecyclerView">
+        app:srlFooterTranslationViewId="@id/recordListRecyclerView">
 
         <com.scwang.smart.refresh.header.ClassicsHeader
             android:layout_width="match_parent"
@@ -33,7 +33,7 @@
                 android:clipToPadding="false"
                 android:overScrollMode="never"
                 android:paddingTop="160dp"
-                tools:listitem="@layout/item_event" />
+                tools:listitem="@layout/item_history" />
 
             <FrameLayout
                 android:layout_width="match_parent"
