@@ -36,7 +36,7 @@ class FaceRecognitionActivity : AppCompatActivity() {
 
     private var tempFaceFeature : Mat? = null
 
-    private var l2ScoreThreshold : Double = 0.6
+    private var l2ScoreThreshold : Double = 0.9
 
     private var faceScore : Int = 0
     private val faceScoreThreshold : Int = 10
@@ -166,12 +166,12 @@ class FaceRecognitionActivity : AppCompatActivity() {
                                             val score =  faceRecognizer!!.match(matFromJson(originFeature), tempFaceFeature, FR_NORM_L2)
                                             //Log.i("matchFeature","源数据：${originFeature}")
                                             //Log.i("matchFeature","检测到的数据：${matToJson(tempFaceFeature!!)}")
-                                            //Log.i("matchFeature","对比分数：${score}")
+                                            Log.i("matchFeature","对比分数：${score}")
                                             //对比来源脸
                                             if(score<l2ScoreThreshold){//符合
                                                 //Log.i("matchFeature","符合")
                                                 val intent = Intent().apply {
-                                                    putExtra("matchResult","ture")
+                                                    putExtra("matchResult","true")
                                                 }
                                                 setResult(2,intent)
                                                 recognizeFinished = true

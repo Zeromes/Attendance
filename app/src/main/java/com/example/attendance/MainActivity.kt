@@ -16,6 +16,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.attendance.data.UsingUserData
 import com.example.attendance.data.UsingUserData.usingUserEmail
 import com.example.attendance.databinding.ActivityMainBinding
+import com.example.attendance.ui.attendance.AttendanceActivity
 import com.example.attendance.ui.myAttendance.AddNewAttendanceActivity
 import com.example.attendance.ui.myAttendance.EventDetailActivity
 import com.example.attendance.ui.profile.login.LoginActivity
@@ -92,19 +93,21 @@ class MainActivity : AppCompatActivity() {
                 .setScanNoticeText("将二维码置于框中") // 设置扫码文字提示
                 .setFlashLightInvisible() // 不使用闪光灯图标及提示
                 .enableOpenCVDetect(true)// OpenCV探测
-                .setOnScanResultDelegate(OnScanDelegate { activity, result, format ->
-
-                    Log.i("扫码","activity：$activity")
-                    Log.i("扫码","结果：$result")
-                    Log.i("扫码","format：$format")
+                .continuousScan()// 连续扫码，不关闭扫码界面
+                .setOnScanResultDelegate { activity, result, format ->
+                    //Log.i("扫码","activity：$activity")
+                    //Log.i("扫码","结果：$result")
+                    //Log.i("扫码","format：$format")
                     // 接管扫码成功的数据
-                    /*val intent = Intent(
-                        this@MainActivity,
-                        DelegateActivity::class.java
-                    )
-                    intent.putExtra("result", result)
-                    startActivity(intent)*/
-                })
+                    //TODO：创建人扫码直接进入事件详情页
+                    if (result.substring(0, 22) == "AttendanceSystemQRCode") {
+                        activity.finish()
+                        val intent = Intent(this, AttendanceActivity::class.java).apply {
+                            putExtra("id", result.substring(22))
+                        }
+                        startActivity(intent)
+                    }
+                }
                 .start()
         }
     }

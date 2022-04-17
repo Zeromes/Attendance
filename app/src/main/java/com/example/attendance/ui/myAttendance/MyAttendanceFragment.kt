@@ -57,7 +57,7 @@ class MyAttendanceFragment : Fragment() {
 
         val eventCardList = mutableListOf<EventCardData>()
 
-        val recyclerView : RecyclerView = binding.historyRecyclerView//获取RecyclerView
+        val recyclerView : RecyclerView = binding.eventListRecyclerView//获取RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
         val mAdapter = EventCardAdapter(eventCardList)
         recyclerView.adapter = mAdapter
@@ -129,7 +129,7 @@ class MyAttendanceFragment : Fragment() {
                     val result : EventListData = Gson().fromJson(it,EventListData::class.java)
                     for (item in result.result){
                         val dateOrWeekday = when(item.cycle){
-                            "一次性"-> "${item.year}年${item.month}月${item.day}日"
+                            "一次性"-> "${item.year}年${if(item.month!!.toInt()<10) "0${item.month!!}" else item.month!!}月${if(item.day!!.toInt()<10) "0${item.day!!}" else item.day!!}日"
                             "每天"-> "无日期"
                             "每星期"-> (if(item.weekday1=="true")"星期一、" else "") +
                                     (if(item.weekday2=="true")"星期二、" else "") +
