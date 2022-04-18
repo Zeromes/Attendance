@@ -1,14 +1,18 @@
 package com.example.attendance.ui.attendance
 
+import android.Manifest
 import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.baidu.location.BDAbstractLocationListener
 import com.baidu.location.BDLocation
 import com.baidu.location.LocationClient
@@ -31,8 +35,8 @@ class AttendanceActivity : AppCompatActivity() {
     private lateinit var loadingDialog : ProgressDialog
     private lateinit var userData : UserData
     private lateinit var eventData : EventDetailData
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+
+    private fun renderUI(){
         setContentView(R.layout.activity_attendance)
         //显示加载中
         loadingDialog = ProgressDialog.show(this, "", "处理中", true)
@@ -86,6 +90,8 @@ class AttendanceActivity : AppCompatActivity() {
                         }
                     }
                     else{
+                        //TODO：获取定位权限
+
                         //进行定位
                         LocationClient.setAgreePrivacy(true)
                         //声明LocationClient类
@@ -170,6 +176,52 @@ class AttendanceActivity : AppCompatActivity() {
                     }.show()
             }
         })
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        //检查权限
+        if(
+            ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED||
+            ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED){
+            requestPermissions(arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION),1)
+        }
+        else{
+            renderUI()
+        }
+
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            1 -> {
+                // If request is cancelled, the result arrays are empty.
+                if ((grantResults.isNotEmpty()&&
+                            grantResults[0] == PackageManager.PERMISSION_GRANTED&&
+                            grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
+                    // Permission is granted. Continue the action or workflow
+                    // in your app.
+                    renderUI()
+                } else {
+                    // Explain to the user that the feature is unavailable because
+                    // the features requires a permission that the user has denied.
+                    // At the same time, respect the user's decision. Don't link to
+                    // system settings in an effort to convince the user to change
+                    // their decision.
+                    Toast.makeText(this, "权限被拒绝！", Toast.LENGTH_LONG).show()
+                }
+                return
+            }
+
+            // Add other 'when' lines to check for other
+            // permissions this app might request.
+            else -> {
+                // Ignore all other requests.
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
