@@ -32,31 +32,39 @@ object HttpsUtils {
         conn.instanceFollowRedirects = true
         val data = "method=${method}&data=${URLEncoder.encode(jsonData,"UTF-8")}".toByteArray()
         Thread(){
-            Looper.prepare()
-            conn.connect()
-            val dos = conn.outputStream
-            dos.write(data)
-            dos.flush()
-            dos.close()
-            loadingDialog?.dismiss()
-            if(conn.responseCode == HttpURLConnection.HTTP_OK){
-                //请求成功
-                val result = String(conn.inputStream.readBytes(), charset("UTF-8"))
-                if(result == "error"){
-                    //服务器应用出错
-                    Toast.makeText(context,"服务器错误！", Toast.LENGTH_LONG).show()
-                    failCallback()
+            try {
+                Looper.prepare()
+                conn.connect()
+                val dos = conn.outputStream
+                dos.write(data)
+                dos.flush()
+                dos.close()
+                loadingDialog?.dismiss()
+                if(conn.responseCode == HttpURLConnection.HTTP_OK){
+                    //请求成功
+                    val result = String(conn.inputStream.readBytes(), charset("UTF-8"))
+                    if(result == "error"){
+                        //服务器应用出错
+                        Toast.makeText(context,"服务器错误！", Toast.LENGTH_LONG).show()
+                        failCallback()
+                    }
+                    else{
+                        //正常返回数据
+                        successCallback(result)
+                    }
                 }
                 else{
-                    //正常返回数据
-                    successCallback(result)
+                    //请求失败
+                    Toast.makeText(context,"请求失败！", Toast.LENGTH_LONG).show()
+                    failCallback()
                 }
-            }
-            else{
+            }catch (e:Exception){
                 //请求失败
-                Toast.makeText(context,"请求失败！", Toast.LENGTH_LONG).show()
+                e.printStackTrace()
+                Toast.makeText(context,"网络错误！", Toast.LENGTH_LONG).show()
                 failCallback()
             }
+
         }.start()
     }
 }
