@@ -61,6 +61,7 @@ object HttpsUtils {
             }catch (e:Exception){
                 //请求失败
                 e.printStackTrace()
+                loadingDialog?.dismiss()
                 Toast.makeText(context,"网络错误！", Toast.LENGTH_LONG).show()
                 failCallback()
             }
