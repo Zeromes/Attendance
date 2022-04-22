@@ -185,33 +185,8 @@ class AddNewAttendanceActivity : AppCompatActivity() {
                 //定位的回调
                 override fun onReceiveLocation(location: BDLocation?) {
                     //此处的BDLocation为定位结果信息类，通过它的各种get方法可获取定位相关的全部结果
-                    //以下只列举部分获取经纬度相关（常用）的结果信息
-                    //更多结果信息获取说明，请参照类参考中BDLocation类中的说明
-                    val latitude = location!!.latitude //获取纬度信息
-                    val longitude = location.longitude //获取经度信息
-
-                    //定义Maker坐标点
-                    val point = LatLng(latitude, longitude)
-                    //构建Marker图标
-                    val bitmap = BitmapDescriptorFactory
-                        .fromResource(R.drawable.ic_pointer)
-                    //构建MarkerOption，用于在地图上添加Marker
-                    val option: OverlayOptions = MarkerOptions()
-                        .position(point)
-                        .icon(bitmap)
-                    //在地图上添加Marker，并显示
-                    mMapView?.map?.addOverlay(option)
-
-                    val cenPt = LatLng(latitude,longitude)  //设定中心点坐标
-
-                    val mMapStatus : MapStatus = MapStatus.Builder()//定义地图状态
-                        .target(cenPt)
-                        .zoom(18F)
-                        .build()  //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
-                    val mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus)
-                    mMapView?.map?.setMapStatus(mMapStatusUpdate)//改变地图状态
-                    selectedLatitude = latitude
-                    selectedLongitude = longitude
+                    selectedLatitude = location!!.latitude
+                    selectedLongitude = location.longitude
                     mLocationClient?.stop()
                     findViewById<SeekBar>(R.id.rangeSeekBar).setProgress(50,true)
                     selectedRange = 50

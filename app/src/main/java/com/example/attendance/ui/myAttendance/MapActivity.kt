@@ -52,24 +52,6 @@ class MapActivity : AppCompatActivity() {
         val mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
         mMapView!!.map.setMapStatus(mMapStatusUpdate);//改变地图状态
 
-        //设置单击监听器
-        mMapView!!.map.setOnMapClickListener(object : BaiduMap.OnMapClickListener {
-            override fun onMapClick(point: LatLng?) {
-                /*mMapView!!.map.clear()
-                mMapView!!.map.addOverlay(MarkerOptions()
-                    .position(point)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pointer))
-                )
-                latitude = point!!.latitude
-                longitude = point.longitude*/
-                Log.i("地图监听器","onMapClick")
-            }
-
-            override fun onMapPoiClick(mapPoi: MapPoi?) {
-
-            }
-
-        })
         mMapView!!.map.setOnMapStatusChangeListener(object : BaiduMap.OnMapStatusChangeListener{
             override fun onMapStatusChangeStart(status: MapStatus?) {
             }

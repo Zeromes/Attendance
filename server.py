@@ -17,7 +17,7 @@ def attendance():
         mydb = mysql.connector.connect(
           host="localhost",
           user="root",
-          passwd="***********",
+          passwd="*****",
           database="attendance"
         )
         mycursor = mydb.cursor()
