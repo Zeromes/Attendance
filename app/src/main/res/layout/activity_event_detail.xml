@@ -219,9 +219,8 @@
                 android:layout_height="60dp"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginVertical="10dp"
-                android:onClick="onClickArchiveEvent"
-                android:text="@string/archive_event"
-                android:visibility="gone" />
+                android:onClick="onClickGetEventStatistics"
+                android:text="@string/get_event_statistics" />
 
         </LinearLayout>
     </ScrollView>

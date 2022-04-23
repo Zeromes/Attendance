@@ -183,8 +183,11 @@ class EventDetailActivity : AppCompatActivity() {
         startActivityForResult(intent,1)
     }
 
-    fun onClickArchiveEvent(view: View){
-
+    fun onClickGetEventStatistics(view: View){
+        val intent = Intent(this, EventStatisticsActivity::class.java).apply {
+            putExtra("id",this@EventDetailActivity.data!!.id.toString())
+        }
+        startActivity(intent)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
