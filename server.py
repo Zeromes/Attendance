@@ -301,7 +301,6 @@ def attendance():
             #检查是否能考勤模块
             #检查时间段
             #检查是否已经考勤过
-            # 获取考勤事件信息
             sql = "SELECT * FROM event WHERE id = %s"
             val = (data['eventId'], )
             try:
@@ -402,6 +401,50 @@ def attendance():
                         "day":row[5],
                         "hour":row[6],
                         "minute":row[7]
+                    }
+                    resultSet["result"].append(returnData)
+                msg = json.dumps(resultSet)
+            except:
+                msg = "error"
+                print("获取考勤历史列表时遇到错误:", sys.exc_info()[0], sys.exc_info()[1])
+            finally:
+                return msg
+        elif request.form['method'] == 'getStatisticsList':
+            #获取考勤统计信息列表模块
+            #SQL：一次获取五条，需要一个offset
+            sql = "SELECT * FROM participance WHERE eventId = %s AND year = %s AND month = %s AND day = %s ORDER BY id DESC LIMIT 10 OFFSET %s"
+            val = (data['id'],data['year'],data['month'],data['dayOfMonth'], int(data['offset']))
+            try:
+                mycursor.execute(sql, val)
+                myresult = mycursor.fetchall()
+                if(len(myresult)<10):
+                    #数据查完了
+                    resultSet = {
+                        "state":"noMore",
+                        "result":[]
+                    }
+                else:
+                    resultSet = {
+                        "state":"succsee",
+                        "result":[]
+                    }
+                for row in myresult:
+                    temoCursor = mydb.cursor()
+                    tempsql = "SELECT name FROM user WHERE email = %s"
+                    tempval = (row[2], )
+                    temoCursor.execute(tempsql, tempval)
+                    tempResult = temoCursor.fetchall()
+                    if(int(row[6])<10):
+                        displayHour = "0"+row[6]
+                    else:
+                        displayHour = row[6]
+                    if(int(row[7])<10):
+                        displayMinute = "0"+row[7]
+                    else:
+                        displayMinute = row[7]
+                    returnData = {
+                        "name":tempResult[0][0],
+                        "time":displayHour+":"+displayMinute
                     }
                     resultSet["result"].append(returnData)
                 msg = json.dumps(resultSet)
